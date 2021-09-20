@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include "calc-sintaxis.tab.h"
+int yyparse();
 
 %}
 
@@ -40,10 +41,6 @@ digit [0-9]
                                 strcpy(yylval.s,yytext);
                                 printf("ID : %s\n",yytext);
                                 return ID;}
-
-"-"                       {  printf("%s\n",yytext);
-                                  return TMENOS;} 
-
 
 [+*;()=]                   {  printf("SYMBOL: %s\n",yytext);
                                   return *yytext;}
