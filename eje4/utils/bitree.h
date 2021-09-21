@@ -11,7 +11,6 @@ const char* TTypeString[] = {"None", "Int", "Bool"};
 
 enum TType {None, Int, Bool};
 
-
 typedef struct infoToken {
     int value;
     enum TType type;
@@ -94,17 +93,6 @@ void printList(nodeSt *list) {
     }
 } 
 
-void symbolTableInOrder(nodeT* nodeTree, nodeSt* st) {
-    if (nodeTree==NULL) return;
-    //nodeSt* newSt = newNodeSt(nodeTree->atr, NULL);
-    st = newNodeSt(nodeTree->atr, NULL);
-    nodeTree->st = st;
-    //st->next = newSt;
-    symbolTableInOrder(nodeTree->left, st->next);
-    //printfNode(newSt->info);
-    symbolTableInOrder(nodeTree->right, st->next);
-} 
-
 nodeSt* insertList(nodeSt* list, nodeSt* element)
 {
     if (list == NULL) {
@@ -120,9 +108,6 @@ nodeSt* insertList(nodeSt* list, nodeSt* element)
     return list;
 }
 
-
-
-
 nodeSt* find(char* name, nodeSt* st){
     nodeSt* newst = st;
     while(newst != NULL) {
@@ -133,78 +118,35 @@ nodeSt* find(char* name, nodeSt* st){
     return newst;
 }
 
-// Chequear la lista hasta llegar a la etiqueta prog para verificar que la variable no se haya declarado antes
-int checkNoRedeclaration(char* name, nodeSt* st, int count){
-    if (st==NULL)
-        return 1;
-    if (count > 1)
-        return 0;
-    if (st->info.name==name)
-        count = count + 1; 
-    return checkNoRedeclaration(name, st->next, count+1);
-}
-
-// Chequear la lista hasta llegar a la etiqueta prog para verificar que la variable se haya declarado antes
-int checkDeclaration(char* name, nodeSt* st){
-    if (name==NULL || st == NULL) return 0;
-    if (st->info.name==name){
-        printf("variable declarada");
-        return 1;
-    }
-    return checkDeclaration(name, st->next);
-}
-
-// Asigna el tipo decladarado a las variables en el stmt
-int putType(nodeT* nodeTree, nodeSt* st){
-    if (st->info.label==DECLS){
-        printf("variable: '%s' no declarada",nodeTree->atr.name);
-        return 0;
-    }
-    if (st->info.name==nodeTree->atr.name){
-        nodeTree->atr.type = st->info.type;
-        return 1;
-    }
-    return putType(nodeTree, st->next);
-}
-
-// En una funcion (=,*,+) verificar que ambos lados tengan el mismo tipo
-int checkFuncTypes(nodeT* nodeTree, nodeSt* st){
-    if (nodeTree->left->atr.label!=FUNC && nodeTree->left->atr.type==None){
-        putType(nodeTree->left, st);
-    } else if (nodeTree->left->atr.label==FUNC){
-        checkFuncTypes(nodeTree->left, st);
-    }
-    if (nodeTree->right->atr.label!=FUNC && nodeTree->right->atr.type==None){
-        putType(nodeTree->right, st);
-    } else if (nodeTree->right->atr.label==FUNC){
-        checkFuncTypes(nodeTree->right, st);
-    }
-    if (nodeTree->left->atr.type != nodeTree->right->atr.type){
-        return 0;
-    } else {
-        nodeTree->atr.type = nodeTree->left->atr.type;
-        return 1;
-    }
-}
-
 void printSt(nodeSt* node){
     if (node == NULL) return;
     printfNode(node->info);
     printSt(node->next);
 }
 
-// Demo de como verificaria la valides de el codigo
-void checkValidation(nodeT *nodeTree, nodeSt* st){
-    if (nodeTree == NULL) return; 
-    if (nodeTree->atr.label==STMT){
-        checkDeclaration(nodeTree->left->atr.name, st);
-    } /*else if(nodeTree->atr.label==DECL){
-        checkNoRedeclaration(nodeTree->left->atr.name, st, 0);
-    } else if(nodeTree->atr.label==FUNC){
-        checkFuncTypes(nodeTree, st);
-    }*/
-    checkValidation(nodeTree->left, st);
-    checkValidation(nodeTree->right, st);
+enum TType checkTypes(nodeT* nodeTree){
+    if (nodeTree == NULL) return None; 
+    if (nodeTree->atr.label == VAR || nodeTree->atr.label == CONST)
+        return nodeTree->st->info.type;
+    if (nodeTree->atr.label == FUNC && nodeTree->atr.type == None){
+        nodeTree->st->info.type = checkTypes(nodeTree->left);
+        if (nodeTree->st->info.type != checkTypes(nodeTree->right)){
+            return None; 
+        } else {
+            return nodeTree->st->info.type;
+        }
+    }
+    return None;
 }
 
-
+// Demo de como verificaria la valides de el codigo
+void checkValidation(nodeT *nodeTree){
+    if (nodeTree == NULL) return; 
+    if (nodeTree->atr.label==STMT || nodeTree->atr.label==DECL){
+        if (checkTypes(nodeTree->left) != checkTypes(nodeTree->right)){
+            printf("tipos incompatibles");
+        }
+    } 
+    checkValidation(nodeTree->left);
+    checkValidation(nodeTree->right);
+}
