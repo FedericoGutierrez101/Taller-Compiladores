@@ -7,19 +7,18 @@
 int yylex();
 int yyerror(char *);
 
-infoT info= {0, None, PROG, "symboltable"};
 nodeSt* symboltable;
 
 %}
  
 %union { int i; char *s; struct nodeTree *tn;}
  
-%token<i> INT
-%token<s> ID
-%token TINT TBOOL TTRUE TFALSE
+%token<i> INT TTRUE TFALSE
+%token<s> ID 
+%token TINT TBOOL 
 %token RETURN
 
-%type<tn> VALUE expr decl stmt stmts decls prog
+%type<tn> VALUE expr decl stmt stmts decls prog return
 %type<i> type
 
 %left '+'  
@@ -34,21 +33,26 @@ prog: decls stmts {
                     nodeT* left = newTree(rootLeft, $1, NULL);
                     nodeT* right = newTree(rootRight, NULL, $2);
                     $$ = newTree(root, left, right); 
-                    printList(symboltable);
-                    printInOrderTree($$, 0); 
+                    //printList(symboltable);
+                    //printInOrderTree($$, 0);
+                    checkValidation($$); 
                 };   
 
-stmts: stmt RETURN expr ';'{ 
-                            infoT root = {0, None, SEMICOLON, NULL};
-                            infoT rootRight = {0, None, RET, NULL};
-                            nodeT* right = newTree(rootRight, NULL, $3);
-                            $$ = newTree(root, $1, right); 
-                        }
+stmts: stmt return { 
+                        infoT root = {0, None, SEMICOLON, NULL};
+                        $$ = newTree(root, $1, $2); 
+                    }
 
     | stmt stmts {
                     infoT root = {0, None, SEMICOLON, NULL};
                     $$ = newTree(root, $1, $2); 
                 }
+
+    | stmt return stmts {   infoT root = {0, None, SEMICOLON, NULL};
+                            infoT rootLeft = {0, None, STMT, NULL};
+                            nodeT* left = newTree(rootLeft, NULL, $2);
+                            $$ = newTree(root, left, $3);
+                        }
     ;
 
 stmt: ID '=' expr ';' {
@@ -69,11 +73,19 @@ decls: decl { $$ = $1;}
                     infoT root = {0, None, SEMICOLON, NULL};
                     $$ = newTree(root, $1, $2); 
                 }
+    
+    | decl return decls {   infoT root = {0, None, SEMICOLON, NULL};
+                            nodeT* left = newTree(root, $1, $2);
+                            $$ = newTree(root, left, $3);
+                        }
+
+    | decl return   {   infoT root = {0, None, SEMICOLON, NULL};
+                        $$ = newTree(root, $1, $2); 
+                    }
     ;
 
 decl: type ID '=' expr ';'{
                             infoT root = {0, None, DECL, NULL};
-                            //infoT rootLeft = {0, $1, VAR, $2};
                             infoT rootLeft = {$4->atr.value, $1, VAR, $2};
                             nodeSt* stleft = find($2, symboltable);
                             if (stleft == NULL){
@@ -81,13 +93,19 @@ decl: type ID '=' expr ';'{
                                 insertList(symboltable, stleft);
                             } else {
                                 printf("la variable: %s ya esta declarada", stleft->info.name);
+                                exit(1);
                             }
                             nodeT* left = newNode(rootLeft);
                             left->st = stleft; 
                             $$ = newTree(root, left, $4); 
                         } 
     ;
-  
+
+return: RETURN expr ';' {   infoT root = {0, None, RET, NULL};
+                            $$ = newTree(root, NULL, $2);
+                        }
+    ;
+
 type: TINT    {$$ = Int;}
     | TBOOL   {$$ = Bool;}
     ;
@@ -113,7 +131,10 @@ expr: VALUE
     | ID {
         infoT root = {0, None, VAR, $1}; 
         nodeSt* st = find($1, symboltable); 
-        if (st==NULL) printf("la variable: %s no existe\n", $1);
+        if (st==NULL){
+            printf("La variable: %s no esta declarada\n", $1);
+            exit(1);
+        } 
         $$ = newNode(root);
         $$->st = st;
     }
