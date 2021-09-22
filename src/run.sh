@@ -1,3 +1,5 @@
+./script
+
 clear
 echo "Inicio test 1"
 echo ""
