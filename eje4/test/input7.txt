@@ -1,0 +1,4 @@
+bool aux = TRUE;
+bool isEmpty = FALSE;
+intaux = x28 * x;
+RETURN (x+3);

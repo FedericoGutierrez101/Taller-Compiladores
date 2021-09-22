@@ -1,0 +1,12 @@
+bool aux = TRUE;
+bool isEmpty = FALSE;
+int x = 4;
+int x28 = aux * x + 158;
+aux=  3 * x;
+RETURN (aux);
+aux=  3 + x;
+aux=  39 + x;
+RETURN (aux);
+aux=  874 * x;
+aux=  x28 * x;
+RETURN (x+3);

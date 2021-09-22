@@ -144,7 +144,7 @@ void checkValidation(nodeT *nodeTree){
     if (nodeTree == NULL) return; 
     if (nodeTree->atr.label==STMT || nodeTree->atr.label==DECL){
         if (checkTypes(nodeTree->left) != checkTypes(nodeTree->right)){
-            printf("tipos incompatibles");
+            printf("tipos incompatibles\n");
         }
     } 
     checkValidation(nodeTree->left);

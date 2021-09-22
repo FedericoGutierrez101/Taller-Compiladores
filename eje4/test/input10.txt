@@ -1,0 +1,8 @@
+int aux = 0;
+int x = 4;
+int x28 = (aux * x) + 158;
+aux=  3 * x;
+aux=  x * x;
+aux=  39 + x;
+aux=  874 * x;
+aux=  x28 * x;

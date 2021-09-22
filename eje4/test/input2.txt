@@ -1,4 +1,6 @@
-int x = 4;
+bool x = TRUE;
 int y = x + x;
+RETURN x;
+RETURN y;
 x = x + 5;
 RETURN x;

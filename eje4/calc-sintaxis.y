@@ -18,7 +18,7 @@ nodeSt* symboltable;
 %token TINT TBOOL 
 %token RETURN
 
-%type<tn> VALUE expr decl stmt stmts decls prog return
+%type<tn> VALUE expr decl stmt stmts decls prog return returns
 %type<i> type
 
 %left '+'  
@@ -36,9 +36,20 @@ prog: decls stmts {
                     //printList(symboltable);
                     //printInOrderTree($$, 0);
                     checkValidation($$); 
-                };   
+                }
+    | decls {
+                infoT root = {0, None, PROG, NULL};
+                infoT rootLeft = {0, None, DECLS, NULL};
+                nodeT* left = newTree(rootLeft, $1, NULL);
+                $$ = newTree(root, left, NULL); 
+                //printList(symboltable);
+                //printInOrderTree($$, 0);
+                checkValidation($$); 
+            }
+    ;   
 
-stmts: stmt return { 
+stmts: stmt { $$ = $1;}
+    | stmt returns { 
                         infoT root = {0, None, SEMICOLON, NULL};
                         $$ = newTree(root, $1, $2); 
                     }
@@ -48,7 +59,7 @@ stmts: stmt return {
                     $$ = newTree(root, $1, $2); 
                 }
 
-    | stmt return stmts {   infoT root = {0, None, SEMICOLON, NULL};
+    | stmt returns stmts {   infoT root = {0, None, SEMICOLON, NULL};
                             infoT rootLeft = {0, None, STMT, NULL};
                             nodeT* left = newTree(rootLeft, NULL, $2);
                             $$ = newTree(root, left, $3);
@@ -74,12 +85,12 @@ decls: decl { $$ = $1;}
                     $$ = newTree(root, $1, $2); 
                 }
     
-    | decl return decls {   infoT root = {0, None, SEMICOLON, NULL};
+    | decl returns decls {   infoT root = {0, None, SEMICOLON, NULL};
                             nodeT* left = newTree(root, $1, $2);
                             $$ = newTree(root, left, $3);
                         }
 
-    | decl return   {   infoT root = {0, None, SEMICOLON, NULL};
+    | decl returns   {   infoT root = {0, None, SEMICOLON, NULL};
                         $$ = newTree(root, $1, $2); 
                     }
     ;
@@ -100,6 +111,14 @@ decl: type ID '=' expr ';'{
                             $$ = newTree(root, left, $4); 
                         } 
     ;
+
+returns: return { $$ = $1;}
+
+    | return returns {  infoT root = {0, None, SEMICOLON, NULL};
+                        $$ = newTree(root, $1, $2); 
+                    }
+    ;
+
 
 return: RETURN expr ';' {   infoT root = {0, None, RET, NULL};
                             $$ = newTree(root, NULL, $2);

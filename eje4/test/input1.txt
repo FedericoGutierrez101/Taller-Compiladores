@@ -1,0 +1,4 @@
+bool x = TRUE;
+int y = x + x;
+x = x + 5;
+RETURN x;
