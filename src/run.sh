@@ -69,3 +69,17 @@ echo ""
 ./a.out test/input10.txt
 echo ""
 read -p "Precione cualquier tecla para seguir"
+
+clear
+echo "Inicio test 11"
+echo ""
+./a.out test/input11.txt
+echo ""
+read -p "Precione cualquier tecla para seguir"
+
+clear
+echo "Inicio test 12"
+echo ""
+./a.out test/input12.txt
+echo ""
+read -p "Precione cualquier tecla para seguir"

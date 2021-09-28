@@ -443,9 +443,9 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    29,    29,    40,    51,    52,    57,    62,    69,    82,
-      83,    88,    93,    98,   115,   117,   123,   128,   129,   132,
-     134,   141,   148,   150,   162,   169,   176
+       0,    29,    29,    40,    51,    52,    57,    62,    69,    83,
+      84,    89,    94,    99,   116,   118,   124,   129,   130,   133,
+     135,   142,   149,   151,   163,   170,   177
 };
 #endif
 
@@ -1313,49 +1313,50 @@ yyreduce:
                             printf("la variable: %s no existe\n", (yyvsp[-3].s));
                         }
                         nodeT* left = newNode(rootLeft);
+                        stleft->info.value = (yyvsp[-1].tn)->st->info.value;
                         left->st = stleft;
                         (yyval.tn) = newTree(root, left, (yyvsp[-1].tn)); 
                     }
-#line 1320 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1321 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 82 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 83 "calc-sintaxis.y" /* yacc.c:1646  */
     { (yyval.tn) = (yyvsp[0].tn);}
-#line 1326 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1327 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 83 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 84 "calc-sintaxis.y" /* yacc.c:1646  */
     {
                     infoT root = {0, None, SEMICOLON, NULL};
                     (yyval.tn) = newTree(root, (yyvsp[-1].tn), (yyvsp[0].tn)); 
                 }
-#line 1335 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1336 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 88 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 89 "calc-sintaxis.y" /* yacc.c:1646  */
     {   infoT root = {0, None, SEMICOLON, NULL};
                             nodeT* left = newTree(root, (yyvsp[-2].tn), (yyvsp[-1].tn));
                             (yyval.tn) = newTree(root, left, (yyvsp[0].tn));
                         }
-#line 1344 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1345 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
-#line 93 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 94 "calc-sintaxis.y" /* yacc.c:1646  */
     {   infoT root = {0, None, SEMICOLON, NULL};
                         (yyval.tn) = newTree(root, (yyvsp[-1].tn), (yyvsp[0].tn)); 
                     }
-#line 1352 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1353 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 98 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 99 "calc-sintaxis.y" /* yacc.c:1646  */
     {
                             infoT root = {0, None, DECL, NULL};
-                            infoT rootLeft = {(yyvsp[-1].tn)->atr.value, (yyvsp[-4].i), VAR, (yyvsp[-3].s)};
+                            infoT rootLeft = {(yyvsp[-1].tn)->st->info.value, (yyvsp[-4].i), VAR, (yyvsp[-3].s)};
                             nodeSt* stleft = find((yyvsp[-3].s), symboltable);
                             if (stleft == NULL){
                                 stleft = newNodeSt(rootLeft, NULL); 
@@ -1368,73 +1369,73 @@ yyreduce:
                             left->st = stleft; 
                             (yyval.tn) = newTree(root, left, (yyvsp[-1].tn)); 
                         }
-#line 1372 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1373 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 14:
-#line 115 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 116 "calc-sintaxis.y" /* yacc.c:1646  */
     { (yyval.tn) = (yyvsp[0].tn);}
-#line 1378 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1379 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 117 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 118 "calc-sintaxis.y" /* yacc.c:1646  */
     {  infoT root = {0, None, SEMICOLON, NULL};
                         (yyval.tn) = newTree(root, (yyvsp[-1].tn), (yyvsp[0].tn)); 
                     }
-#line 1386 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1387 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 123 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 124 "calc-sintaxis.y" /* yacc.c:1646  */
     {   infoT root = {0, None, RET, NULL};
                             (yyval.tn) = newTree(root, NULL, (yyvsp[-1].tn));
                         }
-#line 1394 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1395 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
-#line 128 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 129 "calc-sintaxis.y" /* yacc.c:1646  */
     {(yyval.i) = Int;}
-#line 1400 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1401 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
-#line 129 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 130 "calc-sintaxis.y" /* yacc.c:1646  */
     {(yyval.i) = Bool;}
-#line 1406 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1407 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
-#line 134 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 135 "calc-sintaxis.y" /* yacc.c:1646  */
     {   
-                        infoT root = {0, None, FUNC, NULL}; 
+                        infoT root = {((yyvsp[-2].tn)->st->info.value + (yyvsp[0].tn)->st->info.value), None, FUNC, NULL}; 
                         nodeSt* st = newNodeSt(root, NULL); 
                         symboltable = insertList(symboltable, st);
                         (yyval.tn) = newTreeSt(root, (yyvsp[-2].tn), (yyvsp[0].tn), st);
                     }
-#line 1417 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1418 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
-#line 141 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 142 "calc-sintaxis.y" /* yacc.c:1646  */
     {   
-                        infoT root = {0, None, FUNC, NULL}; 
+                        infoT root = {((yyvsp[-2].tn)->st->info.value * (yyvsp[0].tn)->st->info.value), None, FUNC, NULL}; 
                         nodeSt* st = newNodeSt(root, NULL); 
                         symboltable = insertList(symboltable, st);
                         (yyval.tn) = newTreeSt(root, (yyvsp[-2].tn), (yyvsp[0].tn), st);
                     }
-#line 1428 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1429 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
-#line 148 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 149 "calc-sintaxis.y" /* yacc.c:1646  */
     { (yyval.tn) = (yyvsp[-1].tn);}
-#line 1434 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1435 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
-#line 150 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 151 "calc-sintaxis.y" /* yacc.c:1646  */
     {
         infoT root = {0, None, VAR, (yyvsp[0].s)}; 
         nodeSt* st = find((yyvsp[0].s), symboltable); 
@@ -1445,11 +1446,11 @@ yyreduce:
         (yyval.tn) = newNode(root);
         (yyval.tn)->st = st;
     }
-#line 1449 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1450 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
-#line 162 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 163 "calc-sintaxis.y" /* yacc.c:1646  */
     {
         infoT root = {(yyvsp[0].i), Int, CONST, NULL};
         nodeSt* st = newNodeSt(root, NULL); 
@@ -1457,11 +1458,11 @@ yyreduce:
         (yyval.tn) = newNode(root);
         (yyval.tn)->st = st;
     }
-#line 1461 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1462 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
-#line 169 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 170 "calc-sintaxis.y" /* yacc.c:1646  */
     {
         infoT root = {1, Bool, CONST, NULL};
         nodeSt* st = newNodeSt(root, NULL); 
@@ -1469,11 +1470,11 @@ yyreduce:
         (yyval.tn) = newNode(root);
         (yyval.tn)->st = st;
     }
-#line 1473 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1474 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 176 "calc-sintaxis.y" /* yacc.c:1646  */
+#line 177 "calc-sintaxis.y" /* yacc.c:1646  */
     { 
         infoT root = {0, Bool, CONST, NULL};
         nodeSt* st = newNodeSt(root, NULL); 
@@ -1481,11 +1482,11 @@ yyreduce:
         (yyval.tn) = newNode(root);
         (yyval.tn)->st = st;
     }
-#line 1485 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1486 "calc-sintaxis.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1489 "calc-sintaxis.tab.c" /* yacc.c:1646  */
+#line 1490 "calc-sintaxis.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1713,4 +1714,4 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 186 "calc-sintaxis.y" /* yacc.c:1906  */
+#line 187 "calc-sintaxis.y" /* yacc.c:1906  */

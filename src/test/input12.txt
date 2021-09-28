@@ -1,4 +1,5 @@
 bool x = TRUE;
 bool y = x + x;
-x = x + FALSE;
+int aux = 3;
+x = x + ( 4 * aux);
 RETURN y;

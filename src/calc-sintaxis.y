@@ -74,6 +74,7 @@ stmt: ID '=' expr ';' {
                             printf("la variable: %s no existe\n", $1);
                         }
                         nodeT* left = newNode(rootLeft);
+                        stleft->info.value = $3->st->info.value;
                         left->st = stleft;
                         $$ = newTree(root, left, $3); 
                     } 
@@ -97,7 +98,7 @@ decls: decl { $$ = $1;}
 
 decl: type ID '=' expr ';'{
                             infoT root = {0, None, DECL, NULL};
-                            infoT rootLeft = {$4->atr.value, $1, VAR, $2};
+                            infoT rootLeft = {$4->st->info.value, $1, VAR, $2};
                             nodeSt* stleft = find($2, symboltable);
                             if (stleft == NULL){
                                 stleft = newNodeSt(rootLeft, NULL); 
@@ -132,14 +133,14 @@ type: TINT    {$$ = Int;}
 expr: VALUE               
 
     | expr '+' expr {   
-                        infoT root = {0, None, FUNC, NULL}; 
+                        infoT root = {($1->st->info.value + $3->st->info.value), None, FUNC, NULL}; 
                         nodeSt* st = newNodeSt(root, NULL); 
                         symboltable = insertList(symboltable, st);
                         $$ = newTreeSt(root, $1, $3, st);
                     }
 
     | expr '*' expr {   
-                        infoT root = {0, None, FUNC, NULL}; 
+                        infoT root = {($1->st->info.value * $3->st->info.value), None, FUNC, NULL}; 
                         nodeSt* st = newNodeSt(root, NULL); 
                         symboltable = insertList(symboltable, st);
                         $$ = newTreeSt(root, $1, $3, st);
